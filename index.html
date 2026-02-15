@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Volumetric LED Display Simulator</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/addons/p5.sound.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #000;
+      overflow: hidden;
+      font-family: 'Courier New', monospace;
+    }
+    #info {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      color: #888;
+      font-size: 11px;
+      z-index: 10;
+      pointer-events: none;
+      line-height: 1.6;
+    }
+    #info .key { color: #0af; }
+    #controls {
+      position: fixed;
+      bottom: 12px;
+      left: 12px;
+      z-index: 10;
+    }
+    #controls button {
+      background: #222;
+      color: #0af;
+      border: 1px solid #0af;
+      padding: 6px 14px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      cursor: pointer;
+      margin-right: 6px;
+    }
+    #controls button:hover { background: #0af; color: #000; }
+    #controls .slider-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-left: 12px;
+      vertical-align: middle;
+    }
+    #controls .slider-group label {
+      color: #888;
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+    #controls .slider-group input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100px;
+      height: 4px;
+      background: #333;
+      border-radius: 2px;
+      outline: none;
+    }
+    #controls .slider-group input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 12px;
+      height: 12px;
+      background: #0af;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    #controls .slider-group .slider-val {
+      color: #0af;
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      min-width: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div id="info">
+    <span class="key">CLICK</span> to enable audio<br>
+    <span class="key">DRAG</span> to rotate &nbsp; <span class="key">SCROLL</span> to zoom<br>
+    <span class="key">1-9</span> pattern mode &nbsp; <span class="key">SPACE</span> pause<br>
+    <span class="key">C</span> color scheme<br>
+    <span class="key">SLIDER</span> audio sensitivity
+  </div>
+  <div id="controls">
+    <button onclick="startAudio()">Enable Mic Audio</button>
+    <span class="slider-group">
+      <label>SENSITIVITY</label>
+      <input type="range" id="sensitivity" min="0.1" max="3.0" step="0.05" value="1.0"
+        oninput="window.audioSensitivity=parseFloat(this.value); document.getElementById('sens-val').textContent=this.value+'x'">
+      <span class="slider-val" id="sens-val">1.0x</span>
+    </span>
+    <span class="slider-group">
+      <label>GRID</label>
+      <input type="range" id="gridsize" min="4" max="32" step="1" value="16"
+        oninput="window.resizeGrid(parseInt(this.value)); document.getElementById('grid-val').textContent=this.value+'\u00B3'">
+      <span class="slider-val" id="grid-val">16³</span>
+    </span>
+  </div>
+  <script src="sketch.js"></script>
+</body>
+</html>
