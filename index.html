@@ -13,6 +13,7 @@
       overflow: hidden;
       font-family: 'Courier New', monospace;
     }
+    body.hide-cursor, body.hide-cursor * { cursor: none !important; }
     #info {
       position: fixed;
       top: 12px;
@@ -22,6 +23,7 @@
       z-index: 10;
       pointer-events: none;
       line-height: 1.6;
+      transition: opacity 0.3s;
     }
     #info .key { color: #0af; }
     #controls {
@@ -29,6 +31,7 @@
       bottom: 12px;
       left: 12px;
       z-index: 10;
+      transition: opacity 0.3s;
     }
     #controls button {
       background: #222;
@@ -78,6 +81,45 @@
       font-size: 11px;
       min-width: 30px;
     }
+    .ui-hidden { opacity: 0 !important; pointer-events: none !important; }
+
+    /* Projection mapping calibration overlay */
+    #projection-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 1000;
+      pointer-events: none;
+      display: none;
+    }
+    #projection-overlay.active { display: block; }
+    #projection-overlay svg {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+    }
+    .corner-handle {
+      pointer-events: all;
+      cursor: grab;
+      filter: drop-shadow(0 0 4px rgba(0,170,255,0.8));
+    }
+    .corner-handle:active { cursor: grabbing; }
+    #projection-status {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #0af;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      text-align: center;
+      z-index: 1001;
+      pointer-events: none;
+      display: none;
+      text-shadow: 0 0 10px rgba(0,170,255,0.6);
+      line-height: 2;
+    }
+    #projection-status.active { display: block; }
   </style>
 </head>
 <body>
@@ -86,10 +128,14 @@
     <span class="key">DRAG</span> to rotate &nbsp; <span class="key">SCROLL</span> to zoom<br>
     <span class="key">1-9</span> pattern mode &nbsp; <span class="key">SPACE</span> pause<br>
     <span class="key">C</span> color scheme<br>
-    <span class="key">SLIDER</span> audio sensitivity
+    <span class="key">SLIDER</span> audio sensitivity<br>
+    <span class="key">F</span> fullscreen &nbsp; <span class="key">P</span> projection mapping<br>
+    <span class="key">TAB</span> toggle UI &nbsp; <span class="key">ESC</span> exit fullscreen
   </div>
   <div id="controls">
     <button onclick="startAudio()">Enable Mic Audio</button>
+    <button onclick="toggleFullscreen()">Fullscreen</button>
+    <button onclick="toggleProjectionMapping()">Projection Map</button>
     <span class="slider-group">
       <label>SENSITIVITY</label>
       <input type="range" id="sensitivity" min="0.1" max="3.0" step="0.05" value="1.0"
@@ -103,6 +149,15 @@
       <span class="slider-val" id="grid-val">16³</span>
     </span>
   </div>
+  <div id="projection-overlay">
+    <svg id="projection-svg"></svg>
+  </div>
+  <div id="projection-status">
+    PROJECTION MAPPING MODE<br>
+    Drag corners to fit projector<br>
+    <span class="key">R</span> reset &nbsp; <span class="key">P</span> done
+  </div>
   <script src="sketch.js"></script>
+  <script src="projection.js"></script>
 </body>
 </html>

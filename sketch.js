@@ -1599,6 +1599,12 @@ function mouseWheel(event) {
 }
 
 function keyPressed() {
+  // F, P, R, Tab handled by projection.js — don't conflict
+  if (key === 'f' || key === 'F') return;
+  if (key === 'p' || key === 'P') return;
+  if (key === 'r' || key === 'R') return;
+  if (keyCode === TAB) return false;
+
   if (key === '1') patternMode = 1;
   if (key === '2') patternMode = 2;
   if (key === '3') patternMode = 3;
